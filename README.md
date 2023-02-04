@@ -10,7 +10,12 @@ authors:
 
 ### Introduction
 
-NFTs or Non-Fungible Tokens have a lot of unique benefits to the blockchain ecosystem. One of those benefits is the ability to create and trade digital items or a representation of a physical item. In this tutorial, you’ll learn how to create a simple decentralized application for Buying and selling vintage items as NFTs on the Celo Blockchain. Hopefully one day you will use this knowledge to create the next open sea 🙂.
+NFTs or Non-Fungible Tokens have a lot of unique benefits to the blockchain ecosystem. These benefits includes:
+
+- Ability to create and trade digital items.
+- Representation of a physical item. 
+
+In this tutorial, you’ll learn how to create a simple decentralized application for Buying and selling vintage items as NFTs on the Celo Blockchain. Hopefully one day you will use this knowledge to create the next open sea 🙂.
 
 Here’s a demo [link](https://aquamarine-unicorn-2f3217.netlify.app/) of what you’ll be creating.
 
@@ -38,9 +43,9 @@ Basic web Development.
 
 Click on [this](https://github.com/4undRaiser/VintageNFTMarketplace) repo from your github.
 
-- Clone the repo to your computer.
-- open the project from from vscode.
-- Run `npm install` command to install all the dependencies required to run the app locally.
+1. Clone the repo to your computer.
+2. Open the project from vscode.
+3. Run `npm install` command to install all the dependencies required to run the app locally.
 
 ### Folder structure
 
@@ -98,7 +103,11 @@ Click on [this](https://github.com/4undRaiser/VintageNFTMarketplace) repo from y
 
 ### SmartContract
 
-In this chapter, we’ll be creating two separate smart contracts for our decentralized application. You can use either remix, visual studio or hardhat to write the smart contract.
+In this chapter, we’ll be creating two separate smart contracts for our decentralized application. To write smart contaract, you can use any of the following 
+
+- remix
+- visual studio 
+- hardhat 
 
 First, we’ll create a smart contract for minting nfts and next we’ll create another one for the marketplace.
 Splitting smart-contract this way is considered best practice in the solidity community.
@@ -197,10 +206,10 @@ contract MyNFT is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, Ow
 }
 ```
 
-In the First line, we inherited all the open zeppelin contracts. Next, we declare the \_tokenIdCounter variable using the inherited features from the Counters open zeppelin secured contracts which will be incremented every time an NFT is minted.
+In the First line, we inherited all the open zeppelin contracts. Next, we declare the \_tokenIdCounter variable using the inherited features from the Counters open zeppelin secured contracts, which will be incremented every time an NFT is minted.
 Finally, we declared our constructor for the ERC721 token with the name and Symbol of our token.
 
-Next, we’ll create the main function for minting NFTs.
+Next, we created the main function for minting NFTs.
 
 ```solidity
  function createNFT(string memory uri) public returns(uint) {
@@ -222,7 +231,7 @@ The rest of the functions are overrides that are required by solidity.
 
 #### Marketplace Contract
 
-This is how the Completed Marketplace Contract will look like
+TheMarketplace Contract will look like the code below.
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -324,7 +333,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 ```
 
-This time we’ll also be using just two contracts from openzeppelin, `Counters` and `ERC721`.
+This time we’ll use just two contracts from openzeppelin, `Counters` and `ERC721`.
 
 Let’s start building up our contract.
 
@@ -352,9 +361,14 @@ contract NFTMarketplace {
 }
 ```
 
-First, we create our contract and name it `NFTMarketplace`. Then we declare a variable `numOfListing` this variable will keep track of the number of nfts that have been listed in our marketplace.
+First, we create our contract and name it `NFTMarketplace`. Then we declare a variable `numOfListing`. the `numOfListing` variable will keep track of the number of nfts that have been listed in our marketplace.
 
-Next, create a struct `NFTListing` that will hold the properties of our NFT listing such as the NFT address, tokenId, price, seller, and a bool forSale to control the selling and buying of our NFT.
+Next, create a struct `NFTListing` that will hold the properties of our NFT listing such as the following.
+- NFT address
+- tokenId
+- price 
+- seller 
+- and a bool forSale to control the selling and buying of our NFT.
 
 We need a mapping that will store our listings so create mapping called `listings` and pass in a uint as the key and our struct `NFTListing` will be the value.
 
@@ -470,10 +484,10 @@ That’s it For the smart contract. Next, we’ll be looking at the front end.
 
 We’ll use the following stack for this section.
 
-Hardhat
-Web3.Storage
-useContractKit
-IPFS
+- Hardhat
+- Web3.Storage
+- useContractKit
+- IPFS
 
 #### Setup
 
@@ -544,9 +558,9 @@ module.exports = {
 };
 ```
 
-Configure your hardhat.config file to look like this to enable hardhat to deploy the smart contracts to the celo blockchain.
+Configure your hardhat.config file to look like the above. This enable hardhat to deploy the smart contracts to the celo blockchain.
 
-Next let's create a script to deploy the smart contracts.
+Next, let's create a script to deploy the smart contracts.
 
 ```javascript
 const hre = require("hardhat");
@@ -619,7 +633,7 @@ main()
   });
 ```
 
-The Script Above will deploy both of the smart contracts and create a contract folder for the abi and contract address for both the marketplace contract and the NFT minter contract.
+The Script Above will deploy both of the smart contracts. The script will also create a contract folder for the abi and contract address for both the marketplace contract and the NFT minter contract.
 
 Deploy the smart contracts to the celo block-chain by running this command
 
@@ -675,11 +689,10 @@ ReactDOM.render(
 reportWebVitals();
 ```
 
-In the Index.js we made some necessary imports like the ContractKitProvider, Alfajores, and NetworkNames from the use-contract kit.
+In `Index.js` file we made some necessary imports like the ContractKitProvider, Alfajores, and NetworkNames from the [use-contract kit](https://docs.celo.org/developer/contractkit).
 
 Next, we wrapped our ContractKitProvider around the app Component to enable our app to connect to the celo test network.
 
-[Click here](https://docs.celo.org/developer/contractkit) to learn more about ContractKit
 
 #### Hooks
 
@@ -1038,7 +1051,7 @@ https://docs.soliditylang.org/en/v0.8.17/
 
 ### About the author
 
-I'm Jonathan Iheme, A full stack block-chain Developer from nigeria Rounding up my computer science degree.
+I'm Jonathan Iheme, A full stack block-chain Developer from Nigeria Rounding up my computer science degree.
 
 ### References
 
