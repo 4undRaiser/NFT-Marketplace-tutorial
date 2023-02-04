@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
@@ -18,7 +19,7 @@ contract MyNFT is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, Ow
    
 
     function createNFT(string memory uri) public returns(uint) {
-         _tokenIdCounter.increment();
+        _tokenIdCounter.increment();
         uint256 tokenId = _tokenIdCounter.current();
         _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, uri);

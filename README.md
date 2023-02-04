@@ -10,29 +10,29 @@ authors:
 
 ### Introduction
 
-NFTs or Non-Fungible Tokens have a lot of unique benefits to the blockchain ecosystem. One of those benefits is the ability to create and trade digital items or a representation of a physical item. In this tutorial, you’ll learn how to create a simple decentralized application for Buying and selling vintage items as NFTs on the Celo Blockchain. Hopefully one day you will use this knowledge to create the next open sea 🙂.
+NFTs or Non-Fungible Tokens have a lot of unique benefits to the blockchain ecosystem. One of those benefits is the ability to create and trade digital items or a representation of a physical item. In this tutorial, you’ll learn how to create a simple decentralized application for Buying and selling vintage items as NFTs on the Celo Blockchain. Hopefully, one day you will use this knowledge to create the next open sea 🙂.
 
 Here’s a demo [link](https://aquamarine-unicorn-2f3217.netlify.app/) of what you’ll be creating.
 
 ### Prerequisites
 
-To fully follow up with these tutorials, you should have a basic understanding of the following technologies.
+To fully follow up with these tutorials, you should have a basic understanding of the following technologies:
 
-Solidity, smart-contract and blockchain concepts.
-Hardhat.
-React.
-Basic web Development.
+- Solidity, smart-contracts and blockchain concepts.
+- Hardhat.
+- React.
+- Basic web Development knowledge.
 
 ### Requirements
 
-- Solidity.
-- OpenZeppelin.
-- Hardhat.
-- React.
-- Bootstrap.
-- IPFS.
-- NodeJS 12.0.1 upwards installed.
-- MetaMask.
+- [Solidity](https://soliditylang.org/).
+- [OpenZeppelin](https://www.openzeppelin.com/).
+- [Hardhat](https://hardhat.org/).
+- [React](https://reactjs.org/).
+- [Bootstrap](https://getbootstrap.com/).
+- [IPFS](https://ipfs.tech/).
+- [NodeJS](https://nodejs.org/en/) 12.0.1 upwards installed.
+- [MetaMask](https://metamask.io/).
 
 ### Installation
 
@@ -98,10 +98,10 @@ Click on [this](https://github.com/4undRaiser/VintageNFTMarketplace) repo from y
 
 ### SmartContract
 
-In this chapter, we’ll be creating two separate smart contracts for our decentralized application. You can use either remix, visual studio or hardhat to write the smart contract.
+In this chapter, we’ll be creating two separate smart contracts for our decentralized application. You can use either Remix or Visual Studio code and Hardhat to write and test the smart contracts.
 
-First, we’ll create a smart contract for minting nfts and next we’ll create another one for the marketplace.
-Splitting smart-contract this way is considered best practice in the solidity community.
+First, we’ll create a smart contract for minting NFTs. Next, we’ll create another one for the marketplace.
+Splitting the smart contracts in this way is considered a best practice in the solidity community.
 
 #### NFT Minter
 
@@ -184,7 +184,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 These contracts provide functionality for creating ERC721 tokens, as well as additional functionality for enumeration, URI storage, Burnable, Ownable, and Counters. OpenZeppelin is an open-source secure framework for building smart contracts. To learn more about open zeppelin smart contracts, [click here](https://docs.openzeppelin.com/contracts/4.x/).
 We’ll be using the ERC721 Token standard.
 
-Next, we’ll inherit all the imported open zeppelin contracts and create our constructors and variables.
+Next, we’ll inherit all the imported OpenZeppelin contracts and create our constructor and variables.
 
 ```solidity
 contract MyNFT is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, Ownable {
@@ -197,7 +197,7 @@ contract MyNFT is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, Ow
 }
 ```
 
-In the First line, we inherited all the open zeppelin contracts. Next, we declare the \_tokenIdCounter variable using the inherited features from the Counters open zeppelin secured contracts which will be incremented every time an NFT is minted.
+In the first line, we inherited all the OpenZeppelin contracts. Next, we declare the \_tokenIdCounter variable using the inherited features from the Counters smart contract which will be incremented every time an NFT is minted.
 Finally, we declared our constructor for the ERC721 token with the name and Symbol of our token.
 
 Next, we’ll create the main function for minting NFTs.
@@ -212,17 +212,17 @@ Next, we’ll create the main function for minting NFTs.
     }
 ```
 
-The `createNFT` function takes a string `uri` as an argument. In our case, the `uri` will be the `ipfs` link hosting the nft metadata. More on `IPFS` Later.
+The `createNFT` function takes a string `uri` as an argument. In our case, the `uri` will be the `IPFS` link hosting the nft metadata. More on `IPFS` Later.
 Next, we create the `tokenId` variable and assign it the current value of our `_tokenIdCounter` variable after which we increment the `_tokenIdCounter`.
 
 Next, call the `_safeMint` function that we inherited from the Openzeppelin ERC721 contract and assign the `msg.sender` and the `tokenId` as the argument since we are building an open marketplace where everyone can mint their NFTs for free.
-Finally, call the `_setTokenURI` function which is inherited from open zeppelin `erc721uristorage`, and return the `tokenId`.
+Finally, call the `_setTokenURI` function which is inherited from Openzeppelin `erc721uristorage`, and return the `tokenId`.
 
-The rest of the functions are overrides that are required by solidity.
+The rest of the functions are overrides that are required by Solidity.
 
 #### Marketplace Contract
 
-This is how the Completed Marketplace Contract will look like
+This is how the completed Marketplace Contract will look like
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -246,7 +246,7 @@ struct NFTListing {
 }
 
 
-  mapping(uint256 => NFTListing) public listings;
+  mapping(uint256 => NFTListing) private listings;
 
    modifier onlyNftOwner(uint _Id) {
         require(msg.sender == listings[_Id].seller);
@@ -296,10 +296,11 @@ function sell(uint256 _Id) external onlyNftOwner(_Id){
         require(msg.value >= listing.price,"not enough balance for this transaction");
         require(listing.forSale != false, "item is not for sell");
         require(listing.seller != msg.sender, "You cannot buy your own nft");
-        payable(listing.seller).transfer(listing.price);
-        listing.nft.transferFrom(address(this), msg.sender, listing.tokenId);
         listing.seller = msg.sender;
         listing.forSale = false;
+        listing.nft.transferFrom(address(this), msg.sender, listing.tokenId);
+        (bool success,) = payable(listing.seller).call{value: listing.price}("");
+        require(success,"Transfer failed");      
     }
 
 // this function will get the listings in the market place
@@ -317,14 +318,14 @@ function sell(uint256 _Id) external onlyNftOwner(_Id){
 
 #### Breakdown
 
-First we import all the necessary contracts from openzeppelin.
+First we import all the necessary contracts from OpenZeppelin.
 
 ```solidity
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 ```
 
-This time we’ll also be using just two contracts from openzeppelin, `Counters` and `ERC721`.
+This time we’ll also be using just two contracts from OpenZeppelin, `Counters` and `ERC721`.
 
 Let’s start building up our contract.
 
@@ -342,7 +343,7 @@ contract NFTMarketplace {
     bool forSale;
 }
 
-  mapping(uint256 => NFTListing) public listings;
+  mapping(uint256 => NFTListing) private listings;
 
 
   modifier onlyNftOwner(uint _Id) {
@@ -352,11 +353,11 @@ contract NFTMarketplace {
 }
 ```
 
-First, we create our contract and name it `NFTMarketplace`. Then we declare a variable `numOfListing` this variable will keep track of the number of nfts that have been listed in our marketplace.
+First, we create our contract and name it `NFTMarketplace`. Then we declare a variable `numOfListing` this variable will keep track of the number of NFTs that have been listed in our marketplace.
 
 Next, create a struct `NFTListing` that will hold the properties of our NFT listing such as the NFT address, tokenId, price, seller, and a bool forSale to control the selling and buying of our NFT.
 
-We need a mapping that will store our listings so create mapping called `listings` and pass in a uint as the key and our struct `NFTListing` will be the value.
+We need a mapping that will store our listings so create a mapping called `listings` and pass in a uint as the key and our struct `NFTListing` will be the value.
 
 And finally, for this section, add in a modifier with uint parameter `_Id` and then add a `require` statement to make sure the owner(seller) is the one making the request.
 
@@ -378,12 +379,12 @@ Next, let's move to the functions and see how they work.
 
 Let’s work on our first function.
 
-Declare a function called `listNFT` with a couple of parameters such as An `ERC721` standard NFT `address _nft`, a `uint tokenId`, and a `uint price`. Let's also make the function `external`.
+Declare a function called `listNFT` with a couple of parameters such as an `ERC721` standard NFT `address _nft`, a `uint tokenId`, and a `uint price`. Let's also make the function `external`.
 
-Add a `require` statement to make sure the `price` argument is greater than 0.
-Next, increment the `numOfListing` variable. So that our first Key will be one. Remember we are using the increment function we inherited from the Counters contract in open zeppelin.
+Add a `require` statement to make sure that the `price` argument is greater than 0.
+Next, increment the `numOfListing` variable so that our first key will be one. Remember, we are using the increment function we inherited from the Counters contract in OpenZeppelin.
 
-Finally, assign all the arguments to our current listing using the current value of the `numOfListing` variable which we can do using the `current()` function thanks to openzeppelin. Note we are setting the `forSale` value to false for now.
+Finally, assign all the arguments to our current listing using the current value of the `numOfListing` variable which we can do using the `current()` function thanks to OpenZeppelin. Note we are setting the `forSale` value to false for now.
 
 Let’s do the sell function next.
 
@@ -397,13 +398,13 @@ function sell(uint256 _Id) external onlyNftOwner(_Id){
   }
 ```
 
-Create a function and name it to `sell`, this time, we'll be using the `modifier` we created earlier because we want only the owner of the listing to be able to call the function. Note the function should have one uint parameter `_Id`.
+Create a function and name it `sell`, this time, we'll be using the `modifier` we created earlier because we want only the owner of the listing to be able to call the function. Notice that the function also have one uint parameter `_Id`.
 
 Inside the function create an instance of the listing using the `_id` from the function argument as the key so that we can access the properties of the listing. Next, add a `require` statement to check if the value of the `forSale` property is false.
 
-Finally, transfer the nft from the owner to the marketplace using the `transferFrom` function and set the value of the `forSale` variable to true so that the Nft will now be available for sale.
+Finally, transfer the NFT from the owner to the marketplace using the `transferFrom` function and set the value of the `forSale` variable to true so that the NFT will now be available for sale.
 
-Next the `cancelSale` function.
+Next, we'll create the `cancelSale` function.
 
 ```solidity
 function cancel(uint _Id) external onlyNftOwner(_Id){
@@ -419,21 +420,22 @@ Create a function called `cancelSale` with a `uint` parameter, make it external,
 
 Next, create an instance of the listing using the `uint Id` argument of the function just like we did with the `sell` function. Add a `require` statement to make sure the value of the `forSale` property is true.
 
-Finally, transfer the Nft back to the owner and set the `forSale` value to false.
+Finally, transfer the NFT back to the owner and set the `forSale` value to false.
 
 Let’s look at the buy Function.
 
 ```solidity
- function buyNFT(uint _Id) external payable {
+  function buyNFT(uint _Id) external payable {
         NFTListing storage listing = listings[_Id];
         require(_Id > 0 && _Id <= numOfListing.current(), "item doesn't exist");
         require(msg.value >= listing.price,"not enough balance for this transaction");
         require(listing.forSale != false, "item is not for sell");
         require(listing.seller != msg.sender, "You cannot buy your own nft");
-        payable(listing.seller).transfer(listing.price);
-        listing.nft.transferFrom(address(this), msg.sender, listing.tokenId);
         listing.seller = msg.sender;
         listing.forSale = false;
+        listing.nft.transferFrom(address(this), msg.sender, listing.tokenId);
+        (bool success,) = payable(listing.seller).call{value: listing.price}("");
+        require(success,"Transfer failed");   
     }
 ```
 
@@ -446,7 +448,7 @@ Next, transfer the `msg.value` to the buyer and transfer the NFT from the seller
 
 Finally set the new value of the `seller` to the buyer and set the `forSale` value of the Listing to false.
 
-Finally, let’s look at two last functions.
+Finally, let’s look at the two last functions.
 
 ```solidity
  function getNFTListing(uint _Id) public view returns (NFTListing memory) {
@@ -458,11 +460,11 @@ Finally, let’s look at two last functions.
     }
 ```
 
-Create a public view function called `getNFTListing` which takes a `uint _Id` parameter and returns a Listing with the `uint` argument as the key.
+Create a public view function called `getNFTListing` which takes a `uint _Id` parameter and returns a listing with the `uint` argument as the key.
 
-Also, Create a public view function called `getListingLength` with no input parameters and it should only return the current value of the `numOfListing` variable.
+Also, create a public view function called `getListingLength` with no input parameters that should only return the current value of the `numOfListing` variable.
 
-That’s it For the smart contract. Next, we’ll be looking at the front end.
+That’s it for the smart contract. Next, we’ll be looking at the front end.
 
 ### Front end
 
@@ -470,10 +472,10 @@ That’s it For the smart contract. Next, we’ll be looking at the front end.
 
 We’ll use the following stack for this section.
 
-Hardhat
-Web3.Storage
-useContractKit
-IPFS
+- [Hardhat](https://hardhat.org/)
+- [Web3.Storage](https://web3.storage/)
+- [Celo useContractKit](https://docs.celo.org/blog/developer-guide/start/web-dapp)
+- [IPFS](https://ipfs.tech/)
 
 #### Setup
 
@@ -488,7 +490,7 @@ REACT_APP_STORAGE_API_KEY=""
 
 #### Deployment
 
-We’ll use hardhat to deploy our smart-contracts to the celo blockchain.
+We’ll use Hardhat to deploy our smart contracts to the Celo blockchain.
 
 ```javascript
 require("@nomiclabs/hardhat-waffle");
@@ -544,9 +546,9 @@ module.exports = {
 };
 ```
 
-Configure your hardhat.config file to look like this to enable hardhat to deploy the smart contracts to the celo blockchain.
+Configure your hardhat.config file to look like this to enable Hardhat to deploy the smart contracts to the Celo blockchain.
 
-Next let's create a script to deploy the smart contracts.
+Next, let's create a script to deploy the smart contracts.
 
 ```javascript
 const hre = require("hardhat");
@@ -619,9 +621,9 @@ main()
   });
 ```
 
-The Script Above will deploy both of the smart contracts and create a contract folder for the abi and contract address for both the marketplace contract and the NFT minter contract.
+The script above will deploy both of the smart contracts and create a contract folder for the ABI and contract address for both the marketplace contract and the NFT minter contract.
 
-Deploy the smart contracts to the celo block-chain by running this command
+Deploy the smart contracts to the celo blockchain by running this command
 
 `npx hardhat run scripts/deploy.js --network alfajores`
 
@@ -761,7 +763,7 @@ export const useMinterContract = () =>
   useContract(MyNFTAbi.abi, MyNFTContractAddress.MyNFT);
 ```
 
-Both files import the abi and contract address from the json files that we generated when we run the deploy scripts which are then used to create and export an instance of their smart contracts.
+Both files import the ABI and contract address from the JSON files that we generated when we run the deploy scripts which are then used to create and export an instance of their smart contracts.
 
 Inside the utils folder open the minter file, it should look like this.
 
@@ -982,7 +984,7 @@ export const cancel = async (marketplaceContract, performActions, tokenId) => {
 };
 ```
 
-Now lets break down some components
+Now let's break down some components
 
 ```javascript
 import axios from "axios";
@@ -994,7 +996,7 @@ import { Web3Storage } from "web3.storage/dist/bundle.esm.min.js";
 
 First, we imported the necessary files from their packages including the contract address for our NFTminter and NFTMarketplace address.
 
-Now let’s setup Web3.storage for storing our nft metadata
+Now let’s setup Web3.storage for storing our NFT metadata
 
 ```javascript
 const getAccessToken = () => {
@@ -1038,7 +1040,7 @@ https://docs.soliditylang.org/en/v0.8.17/
 
 ### About the author
 
-I'm Jonathan Iheme, A full stack block-chain Developer from nigeria Rounding up my computer science degree.
+I'm Jonathan Iheme, A full stack Blockchain Developer from Nigeria rounding up my computer science degree.
 
 ### References
 
