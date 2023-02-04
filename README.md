@@ -108,6 +108,7 @@ Splitting the smart contracts in this way is considered a best practice in the s
 The NFT Minter Contract will look like this.
 
 ```solidity
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
@@ -274,8 +275,8 @@ function sell(uint256 _Id) external onlyNftOwner(_Id){
      NFTListing storage listing = listings[_Id];
      require(listing.seller == msg.sender, "Only the nft owner can sell nft");
      require(listing.forSale == false);
-     listing.nft.transferFrom(msg.sender, address(this), _Id);
      listing.forSale = true;
+     listing.nft.transferFrom(msg.sender, address(this), _Id);
   }
 
 
@@ -283,8 +284,8 @@ function sell(uint256 _Id) external onlyNftOwner(_Id){
      NFTListing storage listing = listings[_Id];
      require(listing.seller == msg.sender);
      require(listing.forSale == true);
-     listing.nft.transferFrom(address(this), msg.sender, _Id);
      listing.forSale = false;
+     listing.nft.transferFrom(address(this), msg.sender, _Id);
   }
 
 
@@ -393,8 +394,8 @@ function sell(uint256 _Id) external onlyNftOwner(_Id){
      NFTListing storage listing = listings[_Id];
      require(listing.seller == msg.sender, "Only the nft owner can sell nft");
      require(listing.forSale == false);
-     listing.nft.transferFrom(msg.sender, address(this), _Id);
      listing.forSale = true;
+     listing.nft.transferFrom(msg.sender, address(this), _Id);
   }
 ```
 
@@ -411,8 +412,8 @@ function cancel(uint _Id) external onlyNftOwner(_Id){
      NFTListing storage listing = listings[_Id];
      require(listing.seller == msg.sender);
      require(listing.forSale == true);
-     listing.nft.transferFrom(address(this), msg.sender, _Id);
      listing.forSale = false;
+     listing.nft.transferFrom(address(this), msg.sender, _Id);
   }
 ```
 

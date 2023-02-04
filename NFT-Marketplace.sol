@@ -48,16 +48,17 @@ contract NFTMarketplace {
             "Only the nft owner can sell nft"
         );
         require(listing.forSale == false);
-        listing.nft.transferFrom(msg.sender, address(this), _Id);
         listing.forSale = true;
+        listing.nft.transferFrom(msg.sender, address(this), _Id);
+        
     }
 
     function cancel(uint256 _Id) external onlyNftOwner(_Id) {
         NFTListing storage listing = listings[_Id];
         require(listing.seller == msg.sender);
         require(listing.forSale == true);
-        listing.nft.transferFrom(address(this), msg.sender, _Id);
         listing.forSale = false;
+        listing.nft.transferFrom(address(this), msg.sender, _Id);
     }
 
     // this function will facilitate the purchasing of a listing
