@@ -3,11 +3,8 @@ title: Build Your Own Full-Stack NFT Marketplace on Celo
 description: Build a full stack Nft Marketplace on the celo block-chain using ipfs and web3.storage for metadata storage.
 authors:
   - name: ✍️ Jonathan Iheme
-url: https://github.com/4undRaiser
-image_url: https://avatars.githubusercontent.com/u/87926451?s=96&v=4
-tags: [nft, solidity, celo]
-hide_table_of_contents: true
-slug: "/tutorials/Build-Your-Own-Full-Stack-NFT-Marketplace-on-Celo"
+    url: https://github.com/4undRaiser
+    image_url: https://avatars.githubusercontent.com/u/87926451?s=96&v=4
 ---
 
 # Build Your Own Full-Stack NFT Marketplace on Celo
