@@ -211,7 +211,7 @@ Finally, we declared our constructor for the ERC721 token with the name and Symb
 
 Next, we created the main function for minting NFTs.
 
-```bash
+```solidity
  function createNFT(string memory uri) public returns(uint) {
          _tokenIdCounter.increment();
         uint256 tokenId = _tokenIdCounter.current();
