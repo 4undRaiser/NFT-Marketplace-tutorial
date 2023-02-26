@@ -12,8 +12,8 @@ authors:
 
 NFTs or Non-Fungible Tokens have a lot of unique benefits to the blockchain ecosystem. These benefits includes:
 
-* Ability to create and trade digital items.
-* Representation of a physical item. 
+- Ability to create and trade digital items.
+- Representation of a physical item. 
 
 In this tutorial, you’ll learn how to create a simple decentralized application for Buying and selling vintage items as NFTs on the Celo Blockchain. Hopefully one day you will use this knowledge to create the next open sea 🙂.
 
